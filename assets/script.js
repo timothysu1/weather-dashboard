@@ -4,6 +4,8 @@ var fiveDayContainerEl = document.querySelector(".five-day-container");
 var cityFormEl = document.querySelector("#city-form");
 var currentWeather = document.querySelector(".current-weather");
 var cityInput = document.querySelector("#city")
+var row = document.querySelector(".row")
+var h4 = document.querySelector("h4")
 
 var today = dayjs();
 
@@ -62,7 +64,7 @@ var getCurrentWeather = function (city) {
     if (response.ok) {
       response.json().then(function (data) {
         console.log(data);
-        displayCurrent(data, cityName)
+        displayCurrent(data, cityName);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -74,8 +76,8 @@ var getCurrentWeather = function (city) {
   fetch(apiUrlFive).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data)
-
+        console.log(data);
+        displayFiveDay(data);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -124,11 +126,65 @@ var displayCurrent = function (weather, cityName) {
   // Humidity
   var humidityEl = document.createElement('div');
   humidityEl.classList.add('m-2');
-  humidityEl.textContent = 'Humidity: '+humidity +' %';
+  humidityEl.textContent = 'Humidity: ' + humidity + '%';
   cardCurrent.appendChild(humidityEl);
+}
+
+//Show 5 day weather
+var displayFiveDay = function (weather) {
+  var fiveDayArray = weather.list;
+  console.log(fiveDayArray);
+
+  h4.textContent = '5 Day Forecast'
+
+
+  for (i = 7; i < 40; i = i + 8) {
+    var forecast = weather.list[i]
+    var temp = Math.round(((forecast.main.temp - 273.15) * (9 / 5)) + 32);
+    var date = dayjs(forecast.dt_txt).format('M/D');
+    var wind = forecast.wind.speed;
+    var humidity = forecast.main.humidity;
+    var weatherIcon = 'http://openweathermap.org/img/w/' + forecast.weather[0].icon + '.png';
+
+    // 5 day forecast card
+    var forecastCard = document.createElement('div');
+    forecastCard.classList.add('d-flex', 'card','flex-column','mx-2');
+
+    //Time
+    var timePlaceEl = document.createElement('h2');
+    timePlaceEl.classList.add('m-2');
+    timePlaceEl.textContent = date
+
+    // Weather Icon
+    var iconEl = document.createElement("img");
+    iconEl.setAttribute("src", weatherIcon);
+    timePlaceEl.append(iconEl);
+
+    forecastCard.appendChild(timePlaceEl);
+    fiveDayContainerEl.appendChild(forecastCard);
+
+    // Temperature
+    var tempEl = document.createElement('div');
+    tempEl.classList.add('m-2');
+    tempEl.textContent = 'Temperature: ' + temp + '°' + 'F';
+    forecastCard.appendChild(tempEl);
+    // Wind
+    var windEl = document.createElement('div');
+    windEl.classList.add('m-2');
+    windEl.textContent = 'Wind: ' + wind + 'MPH';
+    forecastCard.appendChild(windEl);
+    // Humidity
+    var humidityEl = document.createElement('div');
+    humidityEl.classList.add('m-2');
+    humidityEl.textContent = 'Humidity: ' + humidity + '%';
+    forecastCard.appendChild(humidityEl);
+
+  }
 
 
 }
+
+
 
 
 
