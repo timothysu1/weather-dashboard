@@ -52,18 +52,35 @@ var getCurrentWeather = function (city) {
   var lon = city[0].lon;
   var lat = city[0].lat;
   var cityName = city[0].name;
-  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=' + apiKey;
   console.log(cityName + ': ' + lon + ', ' + lat)
 
-  fetch(apiUrl).then(function(response){
-    if (response.ok){
-      response.json().then(function(data){
+  // convert longitude and latitude to local weather
+  var apiUrlCurrnet = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=' + apiKey;
+
+  fetch(apiUrlCurrnet).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
         console.log(data);
+
       });
     } else {
       alert('Error: ' + response.statusText);
     }
   });
+
+  var apiUrlFive = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&appid=' + apiKey;
+
+  fetch(apiUrlFive).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        console.log(data)
+
+      });
+    } else {
+      alert('Error: ' + response.statusText);
+    }
+  });
+
 };
 
 
