@@ -9,6 +9,8 @@ var h4 = document.querySelector("h4")
 
 var today = dayjs();
 
+
+//Submit desired city for search
 var citySubmit = function (event) {
   event.preventDefault();
 
@@ -24,6 +26,14 @@ var citySubmit = function (event) {
   }
 
 };
+
+//turn city into button
+var cityButtons = function(city) {
+var liEl = document.createElement('li');
+  liEl.classList.add('list-group-item','my-1','border');
+liEl.textContent = city
+cityContainerEl.appendChild(liEl);
+}
 
 var cityBtnClick = function (event) {
 
@@ -65,6 +75,7 @@ var getCurrentWeather = function (city) {
       response.json().then(function (data) {
         console.log(data);
         displayCurrent(data, cityName);
+        cityButtons(cityName);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -148,7 +159,7 @@ var displayFiveDay = function (weather) {
 
     // 5 day forecast card
     var forecastCard = document.createElement('div');
-    forecastCard.classList.add('d-flex', 'card','flex-column','mx-2');
+    forecastCard.classList.add('d-flex', 'card','flex-column',);
 
     //Time
     var timePlaceEl = document.createElement('h2');
