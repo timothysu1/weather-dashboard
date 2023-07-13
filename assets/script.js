@@ -5,6 +5,8 @@ var cityFormEl = document.querySelector("#city-form");
 var currentWeather = document.querySelector(".current-weather");
 var cityInput = document.querySelector("#city")
 
+var today = dayjs();
+
 var citySubmit = function (event) {
   event.preventDefault();
 
@@ -26,7 +28,6 @@ var cityBtnClick = function (event) {
 };
 // gets longitude and latitude of desired city
 var getCity = function (city) {
-  console.log(city);
   var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&appid=' + apiKey;
 
   fetch(apiUrl).then(function (response) {
@@ -61,13 +62,13 @@ var getCurrentWeather = function (city) {
     if (response.ok) {
       response.json().then(function (data) {
         console.log(data);
-
+        displayCurrent(data, cityName)
       });
     } else {
       alert('Error: ' + response.statusText);
     }
   });
-
+  //convert to 5 day weather
   var apiUrlFive = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&appid=' + apiKey;
 
   fetch(apiUrlFive).then(function (response) {
@@ -80,12 +81,56 @@ var getCurrentWeather = function (city) {
       alert('Error: ' + response.statusText);
     }
   });
-
 };
+
+// Show current weather
+var displayCurrent = function (weather, cityName) {
+  //convert to fahrenheit 
+  var temp = Math.round(((weather.main.temp - 273.15) * (9 / 5)) + 32);
+  var date = dayjs(weather.coord.dt).format('M/D/YYYY');
+  var wind = weather.wind.speed;
+  var humidity = weather.main.humidity;
+  var weatherIcon = 'http://openweathermap.org/img/w/' + weather.weather[0].icon + '.png';
+  console.log(cityName, temp, date, wind, humidity);
+
+  //Card for current weather
+  var cardCurrent = document.createElement('div');
+  cardCurrent.classList.add('d-flex', 'flex-column', 'card');
+
+  //Time n Place 
+  var timePlaceEl = document.createElement('h2');
+  timePlaceEl.classList.add('m-2');
+  timePlaceEl.textContent = cityName + ' (' + date + ') '
+
+  // Weather Icon
+  var iconEl = document.createElement("img");
+  iconEl.setAttribute("src", weatherIcon);
+  timePlaceEl.append(iconEl);
+
+  cardCurrent.appendChild(timePlaceEl);
+  // add cardCurrent to html
+  currentWeather.appendChild(cardCurrent);
+
+  // Temperature
+  var tempEl = document.createElement('div');
+  tempEl.classList.add('m-2');
+  tempEl.textContent = 'Temperature: ' + temp + '°' + 'F';
+  cardCurrent.appendChild(tempEl);
+  // Wind
+  var windEl = document.createElement('div');
+  windEl.classList.add('m-2');
+  windEl.textContent = 'Wind: ' + wind + 'MPH';
+  cardCurrent.appendChild(windEl);
+  // Humidity
+  var humidityEl = document.createElement('div');
+  humidityEl.classList.add('m-2');
+  humidityEl.textContent = 'Humidity: '+humidity +' %';
+  cardCurrent.appendChild(humidityEl);
+
+
+}
 
 
 
 cityFormEl.addEventListener('submit', citySubmit);
-
-
 
