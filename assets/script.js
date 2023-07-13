@@ -27,6 +27,18 @@ var cityBtnClick = function (event) {
 
 var getCity = function (city) {
   console.log(city);
+  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&appid=' + apiKey;
+
+  fetch(apiUrl).then(function(response) {
+    if (response.ok) {
+      response.json().then(function(data){
+        console.log(data);
+
+      });
+    }else{
+      alert('Error:' + response.statusText);
+    }
+  });
 };
 
 cityFormEl.addEventListener('submit', citySubmit);
