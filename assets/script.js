@@ -7,9 +7,6 @@ var cityInput = document.querySelector("#city")
 var row = document.querySelector(".row")
 var h4 = document.querySelector("h4")
 
-var today = dayjs();
-
-
 //Submit desired city for search
 var citySubmit = function (event) {
   event.preventDefault();
@@ -28,16 +25,32 @@ var citySubmit = function (event) {
 };
 
 //turn city into button
-var cityButtons = function(city) {
-var liEl = document.createElement('li');
-  liEl.classList.add('list-group-item','my-1','border');
-liEl.textContent = city
-cityContainerEl.appendChild(liEl);
+var cityButtons = function (city) {
+  
+  console.log(cityContainerEl)
+  var liEl = document.createElement('li');
+  liEl.classList.add('list-group-item', 'my-1', 'border');
+  liEl.textContent = city
+  cityContainerEl.appendChild(liEl);
 }
 
+//changes city weather on click
 var cityBtnClick = function (event) {
-
+  if (event.target.tagName === 'LI') {
+    console.log(event.target.textContent)
+    currentWeather.textContent = "";
+    fiveDayContainerEl.textContent = "";
+    getCity(event.target.textContent);
+  }
 };
+
+// WORK ON!!!!!!!!!
+//save city to local storage
+var citySaveLocal = function (city) {
+  localStorage.setItem("city",city);
+}
+
+
 // gets longitude and latitude of desired city
 var getCity = function (city) {
   var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&appid=' + apiKey;
@@ -54,8 +67,9 @@ var getCity = function (city) {
   });
 };
 
-// convert longitude and latitude to local weather
 
+
+// convert longitude and latitude to local weather
 var getCurrentWeather = function (city) {
   if (city.length === 0) {
     currentWeather.textContent = "City not found";
@@ -76,6 +90,7 @@ var getCurrentWeather = function (city) {
         console.log(data);
         displayCurrent(data, cityName);
         cityButtons(cityName);
+        citySaveLocal(cityName);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -159,7 +174,7 @@ var displayFiveDay = function (weather) {
 
     // 5 day forecast card
     var forecastCard = document.createElement('div');
-    forecastCard.classList.add('d-flex', 'card','flex-column',);
+    forecastCard.classList.add('d-flex', 'card', 'flex-column',);
 
     //Time
     var timePlaceEl = document.createElement('h2');
@@ -200,4 +215,4 @@ var displayFiveDay = function (weather) {
 
 
 cityFormEl.addEventListener('submit', citySubmit);
-
+cityContainerEl.addEventListener('click', cityBtnClick);
