@@ -6,6 +6,8 @@ var currentWeather = document.querySelector(".current-weather");
 var cityInput = document.querySelector("#city")
 var row = document.querySelector(".row")
 var h4 = document.querySelector("h4")
+var clear = document.querySelector(".trash")
+
 
 //Submit desired city for search
 var citySubmit = function (event) {
@@ -16,6 +18,7 @@ var citySubmit = function (event) {
     getCity(city);
 
     currentWeather.textContent = "";
+    h4.textContent = "";
     fiveDayContainerEl.textContent = "";
     cityInput.value = "";
   } else {
@@ -50,6 +53,7 @@ var cityBtnClick = function (event) {
     console.log(event.target.textContent)
     currentWeather.textContent = "";
     fiveDayContainerEl.textContent = "";
+    h4.textContent = "";
     getCity(event.target.textContent);
   }
 };
@@ -82,8 +86,6 @@ var getCity = function (city) {
     }
   });
 };
-
-
 
 // convert longitude and latitude to local weather
 var getCurrentWeather = function (city) {
@@ -241,7 +243,13 @@ var init = function () {
   }
 }
 
+var clearLocal = function () {
+  localStorage.clear();
+  cityContainerEl.textContent = "";
+}
+
 init();
 
 cityFormEl.addEventListener('submit', citySubmit);
 cityContainerEl.addEventListener('click', cityBtnClick);
+clear.addEventListener('click',clearLocal);

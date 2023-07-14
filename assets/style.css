@@ -1,3 +1,56 @@
+:root {
+  --card-color: #121212;
+  --btn: #3700B3;
+  --li: #BB86FC;
+  --text: white;
+}
+
+body {
+  background-color: var(--card-color);
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  margin-bottom: 2%;
+}
+
+.clear-search {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.trash {
+  width: auto;
+  height: 24px;
+}
+
+.trash:hover {
+  cursor: pointer;
+}
+
+.search {
+  background-color: var(--card-color);
+  color: var(--text);
+}
+
+h4 {
+  color: var(--text);
+}
+
+.list-group-item {
+  background-color: var(--li);
+  color: var(--text);
+}
+
 li:hover {
   cursor: pointer;
+}
+
+.btn {
+  background-color: var(--btn);
+  color: var(--text);
 }
