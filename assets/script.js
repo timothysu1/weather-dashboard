@@ -8,15 +8,12 @@ var row = document.querySelector(".row")
 var h4 = document.querySelector("h4")
 var clear = document.querySelector(".trash")
 
-
 //Submit desired city for search
 var citySubmit = function (event) {
   event.preventDefault();
-
   var city = cityInput.value.trim();
   if (city) {
     getCity(city);
-
     currentWeather.textContent = "";
     h4.textContent = "";
     fiveDayContainerEl.textContent = "";
@@ -24,19 +21,13 @@ var citySubmit = function (event) {
   } else {
     alert("Please enter a city")
   }
-
 };
 
 //turn city into button
-
 var cityArray = [];
 
 var cityButtons = function (arr) {
-  // if(!cityArray.includes(city)){
-  // cityArray.push(city);
-  //}
   cityContainerEl.textContent = "";
-  //console.log(cityArray)
   if (arr) {
     for (var i = 0; i < arr.length; i++) {
       var liEl = document.createElement('li');
@@ -50,7 +41,6 @@ var cityButtons = function (arr) {
 //changes city weather on click
 var cityBtnClick = function (event) {
   if (event.target.tagName === 'LI') {
-    console.log(event.target.textContent)
     currentWeather.textContent = "";
     fiveDayContainerEl.textContent = "";
     h4.textContent = "";
@@ -58,7 +48,6 @@ var cityBtnClick = function (event) {
   }
 };
 
-// WORK ON!!!!!!!!!
 //save city to local storage
 var citySaveLocal = function (city) {
   localStorage.setItem('cityStringify', JSON.stringify(city));
@@ -78,7 +67,6 @@ var getCity = function (city) {
   fetch(apiUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data);
         getCurrentWeather(data)
       });
     } else {
@@ -97,7 +85,6 @@ var getCurrentWeather = function (city) {
   var lon = city[0].lon;
   var lat = city[0].lat;
   var cityName = city[0].name;
-  console.log(cityName + ': ' + lon + ', ' + lat)
 
   // convert longitude and latitude to local weather
   var apiUrlCurrnet = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=' + apiKey;
@@ -105,11 +92,8 @@ var getCurrentWeather = function (city) {
   fetch(apiUrlCurrnet).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data);
 
         //creates array of cities
-
-
         if (!cityArray.includes(cityName)) {
           cityArray.push(cityName);
         }
@@ -128,7 +112,6 @@ var getCurrentWeather = function (city) {
   fetch(apiUrlFive).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data);
         displayFiveDay(data);
       });
     } else {
@@ -145,11 +128,10 @@ var displayCurrent = function (weather, cityName) {
   var wind = weather.wind.speed;
   var humidity = weather.main.humidity;
   var weatherIcon = 'https://openweathermap.org/img/wn/' + weather.weather[0].icon + '.png';
-  console.log(cityName, temp, date, wind, humidity);
 
   //Card for current weather
   var cardCurrent = document.createElement('div');
-  cardCurrent.classList.add('d-flex', 'flex-column', 'card','colorcurrent');
+  cardCurrent.classList.add('d-flex', 'flex-column', 'card', 'colorcurrent');
 
   //Time n Place 
   var timePlaceEl = document.createElement('h2');
@@ -184,11 +166,7 @@ var displayCurrent = function (weather, cityName) {
 
 //Show 5 day weather
 var displayFiveDay = function (weather) {
-  var fiveDayArray = weather.list;
-  console.log(fiveDayArray);
-
   h4.textContent = '5 Day Forecast'
-
 
   for (i = 7; i < 40; i = i + 8) {
     var forecast = weather.list[i]
@@ -230,21 +208,19 @@ var displayFiveDay = function (weather) {
     humidityEl.classList.add('m-2');
     humidityEl.textContent = 'Humidity: ' + humidity + '%';
     forecastCard.appendChild(humidityEl);
-
   }
-
-
 }
-
+//when page launches
 var init = function () {
   var storedCity = JSON.parse(localStorage.getItem('cityStringify'));
-  if (storedCity !==null) {
+  if (storedCity !== null) {
     cityArray = storedCity;
   }
 }
-
+//clear city buttons and storage
 var clearLocal = function () {
   localStorage.clear();
+  cityArray = [];
   cityContainerEl.textContent = "";
 }
 
@@ -252,4 +228,4 @@ init();
 
 cityFormEl.addEventListener('submit', citySubmit);
 cityContainerEl.addEventListener('click', cityBtnClick);
-clear.addEventListener('click',clearLocal);
+clear.addEventListener('click', clearLocal);
