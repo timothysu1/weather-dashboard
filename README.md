@@ -8,7 +8,7 @@
 * [Git](https://git-scm.com/)
 ## Deployed Link
 
-* [See Live Site]()
+* [See Live Site](https://timothysu1.github.io/weather-dashboard/)
 
 ## Usage
 
