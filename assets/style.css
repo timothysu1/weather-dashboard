@@ -3,6 +3,7 @@
   --btn: #3700B3;
   --li: #BB86FC;
   --text: white;
+  --weather-card: #dcdcdc;
 }
 
 body {
@@ -16,7 +17,9 @@ header {
   height: 200px;
   margin-bottom: 2%;
 }
-
+h1{
+  font-size: 50px;
+}
 .clear-search {
   display: flex;
   justify-content: space-around;
@@ -54,3 +57,4 @@ li:hover {
   background-color: var(--btn);
   color: var(--text);
 }
+

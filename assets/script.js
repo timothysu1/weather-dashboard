@@ -73,7 +73,7 @@ cityRenderLocal();
 
 // gets longitude and latitude of desired city
 var getCity = function (city) {
-  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&appid=' + apiKey;
+  var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&appid=' + apiKey;
 
   fetch(apiUrl).then(function (response) {
     if (response.ok) {
@@ -144,12 +144,12 @@ var displayCurrent = function (weather, cityName) {
   var date = dayjs(weather.coord.dt).format('M/D/YYYY');
   var wind = weather.wind.speed;
   var humidity = weather.main.humidity;
-  var weatherIcon = 'http://openweathermap.org/img/wn/' + weather.weather[0].icon + '.png';
+  var weatherIcon = 'https://openweathermap.org/img/wn/' + weather.weather[0].icon + '.png';
   console.log(cityName, temp, date, wind, humidity);
 
   //Card for current weather
   var cardCurrent = document.createElement('div');
-  cardCurrent.classList.add('d-flex', 'flex-column', 'card');
+  cardCurrent.classList.add('d-flex', 'flex-column', 'card','colorcurrent');
 
   //Time n Place 
   var timePlaceEl = document.createElement('h2');
@@ -196,7 +196,7 @@ var displayFiveDay = function (weather) {
     var date = dayjs(forecast.dt_txt).format('M/D');
     var wind = forecast.wind.speed;
     var humidity = forecast.main.humidity;
-    var weatherIcon = 'http://openweathermap.org/img/wn/' + forecast.weather[0].icon + '.png';
+    var weatherIcon = 'https://openweathermap.org/img/wn/' + forecast.weather[0].icon + '.png';
 
     // 5 day forecast card
     var forecastCard = document.createElement('div');
