@@ -25,13 +25,23 @@ var citySubmit = function (event) {
 };
 
 //turn city into button
-var cityButtons = function (city) {
-  
-  console.log(cityContainerEl)
-  var liEl = document.createElement('li');
-  liEl.classList.add('list-group-item', 'my-1', 'border');
-  liEl.textContent = city
-  cityContainerEl.appendChild(liEl);
+
+var cityArray = [];
+
+var cityButtons = function (arr) {
+  // if(!cityArray.includes(city)){
+  // cityArray.push(city);
+  //}
+  cityContainerEl.textContent = "";
+  //console.log(cityArray)
+  if (arr) {
+    for (var i = 0; i < arr.length; i++) {
+      var liEl = document.createElement('li');
+      liEl.classList.add('list-group-item', 'my-1', 'border');
+      liEl.textContent = arr[i]
+      cityContainerEl.appendChild(liEl);
+    }
+  }
 }
 
 //changes city weather on click
@@ -47,9 +57,15 @@ var cityBtnClick = function (event) {
 // WORK ON!!!!!!!!!
 //save city to local storage
 var citySaveLocal = function (city) {
-  localStorage.setItem("city",city);
+  localStorage.setItem('cityStringify', JSON.stringify(city));
 }
 
+//render local storage
+var cityRenderLocal = function () {
+  cityArrayPrev = JSON.parse(localStorage.getItem('cityStringify'));
+  cityButtons(cityArrayPrev);
+}
+cityRenderLocal();
 
 // gets longitude and latitude of desired city
 var getCity = function (city) {
@@ -88,9 +104,17 @@ var getCurrentWeather = function (city) {
     if (response.ok) {
       response.json().then(function (data) {
         console.log(data);
+
+        //creates array of cities
+
+
+        if (!cityArray.includes(cityName)) {
+          cityArray.push(cityName);
+        }
+
         displayCurrent(data, cityName);
-        cityButtons(cityName);
-        citySaveLocal(cityName);
+        cityButtons(cityArray);
+        citySaveLocal(cityArray);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -118,7 +142,7 @@ var displayCurrent = function (weather, cityName) {
   var date = dayjs(weather.coord.dt).format('M/D/YYYY');
   var wind = weather.wind.speed;
   var humidity = weather.main.humidity;
-  var weatherIcon = 'http://openweathermap.org/img/w/' + weather.weather[0].icon + '.png';
+  var weatherIcon = 'http://openweathermap.org/img/wn/' + weather.weather[0].icon + '.png';
   console.log(cityName, temp, date, wind, humidity);
 
   //Card for current weather
@@ -170,7 +194,7 @@ var displayFiveDay = function (weather) {
     var date = dayjs(forecast.dt_txt).format('M/D');
     var wind = forecast.wind.speed;
     var humidity = forecast.main.humidity;
-    var weatherIcon = 'http://openweathermap.org/img/w/' + forecast.weather[0].icon + '.png';
+    var weatherIcon = 'http://openweathermap.org/img/wn/' + forecast.weather[0].icon + '.png';
 
     // 5 day forecast card
     var forecastCard = document.createElement('div');
@@ -210,9 +234,14 @@ var displayFiveDay = function (weather) {
 
 }
 
+var init = function () {
+  var storedCity = JSON.parse(localStorage.getItem('cityStringify'));
+  if (storedCity !==null) {
+    cityArray = storedCity;
+  }
+}
 
-
-
+init();
 
 cityFormEl.addEventListener('submit', citySubmit);
 cityContainerEl.addEventListener('click', cityBtnClick);
